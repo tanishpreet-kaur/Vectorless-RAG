@@ -1,16 +1,19 @@
-from utils.retrieve_leaf_nodes import retrieve_leaf_nodes
+from services.hierarchy_loader import load_hierarchy
+from services.retrieve_leaf_nodes import retrieve_leaf_nodes
+
+hierarchy = load_hierarchy("data/govt_law_chpt_10_structure.json")
 
 def tree_search(state):
-    query = state["query"]
-
-    leaf_nodes = retrieve_leaf_nodes(
-        query=query,
+    ranked_leaf_nodes = retrieve_leaf_nodes(
+        query=state["query"],
         root_nodes=hierarchy["structure"],
-        beam_width=3
+        beam_width=5
     )
 
-    for node in leaf_nodes:
-        print(node["title"])
+    leaf_nodes = [
+        node
+        for node, score in ranked_leaf_nodes
+    ]
 
     return {
         "leaf_nodes": leaf_nodes

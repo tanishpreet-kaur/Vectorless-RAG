@@ -1,6 +1,10 @@
-def main():
-    print("Hello from vectorless-rag!")
+from graph.workflow import app
 
-
-if __name__ == "__main__":
-    main()
+while True:
+    query = input("Query: ")
+    if query.lower() in ["exit", "quit"]:
+        break
+    result = app.invoke({"query": query})
+    print("\nAnswer:")
+    print(result["answer"])
+    print()
