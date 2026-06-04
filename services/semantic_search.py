@@ -1,11 +1,12 @@
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
+from langfuse import observe
 
 embedding_model = SentenceTransformer(
     "BAAI/bge-small-en-v1.5"
 )
 
-
+@observe
 def semantic_search(query: str, nodes: list, top_k: int = 5):
 
     if not nodes:

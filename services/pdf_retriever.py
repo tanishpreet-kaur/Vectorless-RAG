@@ -1,6 +1,9 @@
 from langchain_community.document_loaders import PyPDFLoader
+from langfuse import observe
 
 PDF_PATH = "data/govt_law_chpt_10.pdf"
+
+@observe
 def extract_pdf_pages(pdf_path, start_page, end_page):
     loader = PyPDFLoader(pdf_path)
     docs = loader.load()
@@ -11,28 +14,23 @@ def extract_pdf_pages(pdf_path, start_page, end_page):
     stored_data = ""
     for doc in selected_docs:
         stored_data += doc.page_content + "\n\n"
+    print(stored_data, "iiiiiiiiiiiiiii")
     return stored_data
 
-
+@observe
 def retrieve_pages(nodes):
     context = []
-
     for node in nodes:
         page_text = extract_pdf_pages(
             PDF_PATH,
             node["start_index"],
             node["end_index"]
         )
-
         context.append(
             f"""
             Title: {node['title']}
-
-            Pages:
-            {node['start_index']} - {node['end_index']}
-
-            Content:
-            {page_text}
+            Pages: {node['start_index']} - {node['end_index']}
+            Content: {page_text}
             """
         )
 

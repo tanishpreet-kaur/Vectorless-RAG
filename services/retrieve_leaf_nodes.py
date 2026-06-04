@@ -1,8 +1,9 @@
 from services.semantic_search import (
     semantic_search
 )
+from langfuse import observe
 
-
+@observe
 def retrieve_leaf_nodes(
     query: str,
     root_nodes: list,
