@@ -1,8 +1,20 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+from decouple import config
+api_key=config("OPENROUTER_API_KEY")
+
+from langchain_openai import ChatOpenAI
+llm = ChatOpenAI(
+  base_url="https://openrouter.ai/api/v1",
+  model = "openrouter/owl-alpha",
+  api_key=api_key
+)
+
 from prompts.answer_prompt import ANSWER_PROMPT
-from langchain.chat_models import init_chat_model
+from langfuse import observe
 
-llm = init_chat_model("google_genai:gemini-2.5-flash")
-
+@observe
 def generate_answer(state):
     prompt = ANSWER_PROMPT.format(
         context=state["context"],
